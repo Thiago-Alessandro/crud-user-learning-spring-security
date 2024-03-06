@@ -29,7 +29,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
+        //CSRF -> cross-site request forgery (falsificação de solicitação entre sites)
+        //neste caso a csrf esta desativada (nao há proteção para esse ataque)
         http.csrf(AbstractHttpConfigurer::disable);
+
         http.authorizeHttpRequests(
                 authorizeRequests ->
                         authorizeRequests
@@ -39,9 +42,12 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
 //                                .anyRequest().denyAll()
         );
-        http.securityContext((context) -> context.securityContextRepository(securityContextRepository));
-        http.formLogin(Customizer.withDefaults());
 
+        //O contexto de segurança serve para manter a sessao do usuario autenticado
+        //por padrao armazenado em memoria
+        http.securityContext((context) -> context.securityContextRepository(securityContextRepository));
+
+        http.formLogin(Customizer.withDefaults());
 //        http.logout(Customizer.withDefaults());
 //        http.httpBasic(Customizer.withDefaults());
         return http.build();

@@ -34,7 +34,7 @@ public class UserDetailsEntity implements UserDetails {
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
     private Collection<Autorizacao> authorities;
-//    @NonNull
+    @NonNull
     @OneToOne(mappedBy = "userDetailsEntity")
     @JsonIgnore
     private User user;
@@ -58,6 +58,5 @@ public class UserDetailsEntity implements UserDetails {
     //todos os metodos no proprio usuario (apenas etetica e organização), neste caso não há persistencia dos outros dados de userDetails
     // (o que não há complicações visto que esses atributos não estão sendo usados)
 
-    //RESUMO: Ao implementar UserDetails todos os metodos são obrigatorios
 
 }
