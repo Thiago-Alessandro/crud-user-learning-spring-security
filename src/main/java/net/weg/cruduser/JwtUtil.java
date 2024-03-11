@@ -1,8 +1,6 @@
 package net.weg.cruduser;
 
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
@@ -20,8 +18,8 @@ public class JwtUtil {
                 .compact();
     }
 
-    public void validarToken(String token){
-        getParser().parseSignedClaims(token);
+    private Jws<Claims> validarToken(String token){
+        return getParser().parseSignedClaims(token);
     }
 
     private JwtParser getParser(){
@@ -33,8 +31,7 @@ public class JwtUtil {
 
 // getSubject
     public String getUsername(String token){
-        return getParser().
-                parseSignedClaims(token)
+        return validarToken(token)
                 .getPayload()
                 .getSubject();
     }
