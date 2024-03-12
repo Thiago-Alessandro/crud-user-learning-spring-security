@@ -36,25 +36,26 @@ public class AuthFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        //Busca e validação do token
-        Cookie cookie = coookieUtil.getCookie(request, "JWT");
-        String token = cookie.getValue();
-        String username = jwtUtil.getUsername(token);
+        if(!rotaPublica(request)){
+            //Busca e validação do token
+            Cookie cookie = coookieUtil.getCookie(request, "JWT");
+            String token = cookie.getValue();
+            String username = jwtUtil.getUsername(token);
 
-        //criação do usuario autenticado
-        UserDetails userDetails = authenticationService.loadUserByUsername(username);
-        Authentication authentication =
-                new UsernamePasswordAuthenticationToken(
-                    userDetails,
-                    userDetails.getPassword(),
-                    userDetails.getAuthorities());
+            //criação do usuario autenticado
+            UserDetails userDetails = authenticationService.loadUserByUsername(username);
+            Authentication authentication =
+                    new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            userDetails.getPassword(),
+                            userDetails.getAuthorities());
 
-        //salvamento do usuario austenticado no Security Context
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        //seta como objeto de autenticao o objeto retornado pela autenticacao ja autenticado (que foi setado isAthenticated como true)
-        context.setAuthentication(authentication);
-        securityContextRepository.saveContext(context, request, response);
-
+            //salvamento do usuario austenticado no Security Context
+            SecurityContext context = SecurityContextHolder.createEmptyContext();
+            //seta como objeto de autenticao o objeto retornado pela autenticacao ja autenticado (que foi setado isAthenticated como true)
+            context.setAuthentication(authentication);
+            securityContextRepository.saveContext(context, request, response);
+        }
         //Continuação da requisição
         filterChain.doFilter(request,response);
     }

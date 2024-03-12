@@ -19,12 +19,25 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @AllArgsConstructor
 public class BeanConfigs {
 
     private final AuthenticationService authenticationService;
+
+    @Bean
+    public CorsConfigurationSource corsConfig(){
+        CorsConfiguration corsConfig = new CorsConfiguration();
+        corsConfig.setAllowedOrigins(List.of("http://localhost:3000"));
+        corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
+        corsConfig.setAllowCredentials(true);
+        return corsConfig;
+    }
 
     @Bean
     public SecurityContextRepository securityContextRepository(){

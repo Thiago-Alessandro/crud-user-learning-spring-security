@@ -11,11 +11,13 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 
@@ -26,6 +28,7 @@ import java.security.PublicKey;
 public class SecurityConfig {
 
     private final SecurityContextRepository securityContextRepository;
+    private final AuthFilter authFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
@@ -43,11 +46,17 @@ public class SecurityConfig {
 //                                .anyRequest().denyAll()
         );
 
-        //O contexto de segurança serve para manter a sessao do usuario autenticado
-        //por padrao armazenado em memoria
-        http.securityContext((context) -> context.securityContextRepository(securityContextRepository));
+//        //O contexto de segurança serve para manter a sessao do usuario autenticado
+//        //por padrao armazenado em memoria
+//        http.securityContext((context) -> context.securityContextRepository(securityContextRepository));
 
         http.formLogin(Customizer.withDefaults());
+
+        //stateless -> não há persistencia de sessão, assim que a API envia a response a sessão é terminada
+        http.sessionManagement(config -> config.sessionCreationPolicy(
+                SessionCreationPolicy.STATELESS));
+
+        http.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
 //        http.logout(Customizer.withDefaults());
 //        http.httpBasic(Customizer.withDefaults());
         return http.build();
