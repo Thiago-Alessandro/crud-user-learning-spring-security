@@ -21,6 +21,7 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
@@ -33,10 +34,17 @@ public class BeanConfigs {
     @Bean
     public CorsConfigurationSource corsConfig(){
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOrigins(List.of("http://localhost:3000"));
+        corsConfig.setAllowedOrigins(List.of("http://localhost:4200"));
         corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
+        //seta credentials true para poder pegar os cookies
         corsConfig.setAllowCredentials(true);
-        return corsConfig;
+
+        corsConfig.setAllowedHeaders(List.of("*"));
+        UrlBasedCorsConfigurationSource corsConfigurationSource =
+                new UrlBasedCorsConfigurationSource();
+        corsConfigurationSource.registerCorsConfiguration("/**", corsConfig);
+
+        return corsConfigurationSource;
     }
 
     @Bean
@@ -47,16 +55,16 @@ public class BeanConfigs {
     @Bean
     public AuthenticationManager authenticationManager(){
         DaoAuthenticationProvider dao = new DaoAuthenticationProvider();
-//        dao.setPasswordEncoder(new BCryptPasswordEncoder());
+        dao.setPasswordEncoder(new BCryptPasswordEncoder());
         dao.setUserDetailsService(authenticationService);
         return new ProviderManager(dao);
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-//        return NoOpPasswordEncoder.getInstance();
-        return new BCryptPasswordEncoder();
-    }
+//    @Bean
+//    public PasswordEncoder passwordEncoder(){
+////        return NoOpPasswordEncoder.getInstance();
+//        return new BCryptPasswordEncoder();
+//    }
 
 //    @Autowired
 //    public void configureGlobal(

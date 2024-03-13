@@ -40,6 +40,10 @@ public class SecurityConfig {
                 authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers(HttpMethod.GET, "/user").hasAuthority("Get")
+
+                                .requestMatchers(HttpMethod.GET, "/auth/login").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+
                                 .requestMatchers("/user").hasAnyAuthority("Get", "Post")
 //                                .requestMatchers("/user").permitAll()
                                 .anyRequest().authenticated()
@@ -50,7 +54,8 @@ public class SecurityConfig {
 //        //por padrao armazenado em memoria
 //        http.securityContext((context) -> context.securityContextRepository(securityContextRepository));
 
-        http.formLogin(Customizer.withDefaults());
+//        http.formLogin(Customizer.withDefaults());
+        http.formLogin(AbstractHttpConfigurer::disable);
 
         //stateless -> não há persistencia de sessão, assim que a API envia a response a sessão é terminada
         http.sessionManagement(config -> config.sessionCreationPolicy(
