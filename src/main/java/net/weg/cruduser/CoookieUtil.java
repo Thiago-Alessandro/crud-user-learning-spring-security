@@ -21,8 +21,24 @@ public class CoookieUtil {
     }
 
     public Cookie getCookie(HttpServletRequest request,
-                            String name){
-        return WebUtils.getCookie(request, name);
+                            String name) throws Exception{
+        Cookie cookie = WebUtils.getCookie(request, name);
+        if(cookie != null){
+            return cookie;
+        }
+        throw new Exception("Cookie não encontrado");
+    }
+
+    //nao era p ser necessario, mas serve para excluir um cookie
+    public Cookie gerarCookieNull( ){
+//        String token = new JwtUtil().gerarToken(userDetails);
+        Cookie cookie = new Cookie("JWT", "");
+
+        //O cookie fica disponivel na rota setada e  qualquer outra apos ela (no caso todas as rotas)
+        cookie.setPath("/");
+        //duração em segundos do cookie
+        cookie.setMaxAge(0);
+        return cookie;
     }
 
 }

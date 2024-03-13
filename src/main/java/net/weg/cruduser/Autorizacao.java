@@ -23,4 +23,7 @@ public enum Autorizacao implements GrantedAuthority {
     public String getAuthority() {
         return name;
     }
+//    public String getAuthority() {
+//        return name();
+//    }
 }

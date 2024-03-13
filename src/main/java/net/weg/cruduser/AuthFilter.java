@@ -38,7 +38,14 @@ public class AuthFilter extends OncePerRequestFilter {
 
         if(!rotaPublica(request)){
             //Busca e validação do token
-            Cookie cookie = coookieUtil.getCookie(request, "JWT");
+            Cookie cookie;
+            try {
+                cookie = coookieUtil.getCookie(request, "JWT");
+            } catch (Exception e) {
+                response.setStatus(401);
+                return;
+            }
+
             String token = cookie.getValue();
             String username = jwtUtil.getUsername(token);
 
@@ -55,13 +62,17 @@ public class AuthFilter extends OncePerRequestFilter {
             //seta como objeto de autenticao o objeto retornado pela autenticacao ja autenticado (que foi setado isAthenticated como true)
             context.setAuthentication(authentication);
             securityContextRepository.saveContext(context, request, response);
+
+            // Renovação do JWT e Cookie
+            Cookie cookieRenovado = coookieUtil.gerarCookieJwt(userDetails);
+            response.addCookie(cookieRenovado);
         }
         //Continuação da requisição
         filterChain.doFilter(request,response);
     }
 
+    //definir aqui todas as rotas publicas (permitAll no authFilter)
     private boolean rotaPublica(HttpServletRequest request){
-        System.out.println(request.getMethod());
         return request.getRequestURI().equals("/auth/login");
 //                && (request.getMethod().equals("GET") || request.getMethod().equals("POST"));
     }

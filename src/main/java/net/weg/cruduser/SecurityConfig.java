@@ -1,24 +1,14 @@
 package net.weg.cruduser;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 
 import java.security.PublicKey;
@@ -27,8 +17,8 @@ import java.security.PublicKey;
 @AllArgsConstructor
 public class SecurityConfig {
 
-    private final SecurityContextRepository securityContextRepository;
     private final AuthFilter authFilter;
+    private final SecurityContextRepository securityContextRepository;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
@@ -39,22 +29,21 @@ public class SecurityConfig {
         http.authorizeHttpRequests(
                 authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers(HttpMethod.GET, "/user").hasAuthority("Get")
-
+                                .requestMatchers(HttpMethod.GET, "/user").hasAuthority(Autorizacao.GET.getAuthority())
+                                .requestMatchers(HttpMethod.GET, "/teste").hasAuthority("Get")
+//                                .requestMatchers(HttpMethod.GET, "/teste").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/auth/login").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
 
-                                .requestMatchers("/user").hasAnyAuthority("Get", "Post")
+//                                .requestMatchers("/user").hasAnyAuthority("Get", "Post")
 //                                .requestMatchers("/user").permitAll()
                                 .anyRequest().authenticated()
 //                                .anyRequest().denyAll()
         );
 
-//        //O contexto de segurança serve para manter a sessao do usuario autenticado
-//        //por padrao armazenado em memoria
-//        http.securityContext((context) -> context.securityContextRepository(securityContextRepository));
+        http.securityContext((context) -> context.securityContextRepository(securityContextRepository));
 
-//        http.formLogin(Customizer.withDefaults());
+        http.logout(AbstractHttpConfigurer::disable);
         http.formLogin(AbstractHttpConfigurer::disable);
 
         //stateless -> não há persistencia de sessão, assim que a API envia a response a sessão é terminada
@@ -62,8 +51,6 @@ public class SecurityConfig {
                 SessionCreationPolicy.STATELESS));
 
         http.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
-//        http.logout(Customizer.withDefaults());
-//        http.httpBasic(Customizer.withDefaults());
         return http.build();
     }
 

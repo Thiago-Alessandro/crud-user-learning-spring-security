@@ -24,7 +24,6 @@ public class TesteController {
     public String teste() {
         Authentication auth =
                 SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(auth.getPrincipal());
         return "Teste " + auth.getName() + "!";
     }
 

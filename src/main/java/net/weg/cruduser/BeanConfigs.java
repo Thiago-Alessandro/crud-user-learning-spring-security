@@ -54,10 +54,10 @@ public class BeanConfigs {
 
     @Bean
     public AuthenticationManager authenticationManager(){
-        DaoAuthenticationProvider dao = new DaoAuthenticationProvider();
-        dao.setPasswordEncoder(new BCryptPasswordEncoder());
-        dao.setUserDetailsService(authenticationService);
-        return new ProviderManager(dao);
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(new BCryptPasswordEncoder());
+        provider.setUserDetailsService(authenticationService);
+        return new ProviderManager(provider);
     }
 
 //    @Bean
