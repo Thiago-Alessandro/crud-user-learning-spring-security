@@ -1,15 +1,14 @@
-package net.weg.cruduser;
+package net.weg.cruduser.configs;
 
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import net.weg.cruduser.model.User;
-import net.weg.cruduser.model.UserDetailsEntity;
+import net.weg.cruduser.security.model.entity.UserDetailsEntity;
 import net.weg.cruduser.repository.UserRepository;
+import net.weg.cruduser.security.model.enums.Autorizacao;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Configuration

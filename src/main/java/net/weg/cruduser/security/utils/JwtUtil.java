@@ -1,4 +1,4 @@
-package net.weg.cruduser;
+package net.weg.cruduser.security.utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;

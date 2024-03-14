@@ -1,13 +1,12 @@
-package net.weg.cruduser.model;
+package net.weg.cruduser.security.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.*;
 
-import net.weg.cruduser.Autorizacao;
+import net.weg.cruduser.model.User;
+import net.weg.cruduser.security.model.enums.Autorizacao;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;

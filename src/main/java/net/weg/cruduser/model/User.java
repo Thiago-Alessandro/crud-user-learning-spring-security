@@ -1,11 +1,10 @@
 package net.weg.cruduser.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import net.weg.cruduser.security.model.entity.UserDetailsEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

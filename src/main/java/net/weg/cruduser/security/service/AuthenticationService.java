@@ -1,8 +1,7 @@
-package net.weg.cruduser;
+package net.weg.cruduser.security.service;
 
 import lombok.AllArgsConstructor;
 import net.weg.cruduser.model.User;
-import net.weg.cruduser.model.UserDetailsEntity;
 import net.weg.cruduser.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

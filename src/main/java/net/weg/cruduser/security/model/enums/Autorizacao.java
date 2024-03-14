@@ -1,4 +1,4 @@
-package net.weg.cruduser;
+package net.weg.cruduser.security.model.enums;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

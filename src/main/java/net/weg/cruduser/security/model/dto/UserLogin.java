@@ -1,4 +1,4 @@
-package net.weg.cruduser.model;
+package net.weg.cruduser.security.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

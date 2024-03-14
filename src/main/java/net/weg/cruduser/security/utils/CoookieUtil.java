@@ -1,7 +1,8 @@
-package net.weg.cruduser;
+package net.weg.cruduser.security.utils;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import net.weg.cruduser.security.utils.JwtUtil;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.util.WebUtils;
 
